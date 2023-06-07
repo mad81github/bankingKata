@@ -8,8 +8,9 @@ public class Account {
     private List<Transaction> history= new ArrayList<>();
 
     void deposit(int quantity){
+        currentAmount = currentAmount+quantity;
 
-        Transaction transaction = new Transaction(new Date(),quantity,quantity);
+        Transaction transaction = new Transaction(new Date(),quantity,currentAmount);
         history.add(transaction);
     }
     void withdraw(int quantity) throws Exception {
