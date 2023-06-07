@@ -4,24 +4,26 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Account {
+    static final String DEPOSIT_OPERATION_SYMBOL = "+" ;
+    static final String WITHDRAW_OPERATION_SYMBOL = "-";
     private int currentAmount = 0;
 
     private List<Transaction> history= new ArrayList<>();
 
-    void applyQuantity(int quantity){
+    void applyQuantity(int quantity, String operation){
         currentAmount = currentAmount+quantity;
-        Transaction transaction = new Transaction(new Date(),quantity,currentAmount);
+        Transaction transaction = new Transaction(new Date(),quantity,currentAmount, operation);
         history.add(transaction);
     }
 
     void deposit(int quantity){
-        applyQuantity(quantity);
+        applyQuantity(quantity, DEPOSIT_OPERATION_SYMBOL);
     }
     void withdraw(int quantity) {
         if (currentAmount - quantity < 0) {
             throw new RuntimeException("No Enough amount");
         }
-        applyQuantity(-quantity);
+        applyQuantity(-quantity,WITHDRAW_OPERATION_SYMBOL);
 
     }
     String printStatement() {

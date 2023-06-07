@@ -1,5 +1,7 @@
 package org.example;
 
+import static org.example.Account.DEPOSIT_OPERATION_SYMBOL;
+import static org.example.Account.WITHDRAW_OPERATION_SYMBOL;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +65,7 @@ public class AccountTest {
     }
 
     @Test
-    public void depositShouldStoreTransactionInHistoryWithDateAndCurrentBalanceAddingQuantiy(){
+    public void depositShouldStoreTransactionInHistoryWithDateAndCurrentBalanceAddingQuantiyAndOperation(){
         //given
         Date dateBeforeDeposit = new Date();
         Account account = new Account();
@@ -75,13 +77,14 @@ public class AccountTest {
         Date dateAfterDeposit = new Date();
         assertNotNull(account.getLastTransaction());
         assertEquals(100,account.getLastTransaction().getAmount());
+        assertEquals(DEPOSIT_OPERATION_SYMBOL,account.getLastTransaction().getOperation());
         assertEquals(1100,account.getLastTransaction().getBalance());
         assertDateTransaction(dateBeforeDeposit, account, dateAfterDeposit);
     }
 
 
     @Test
-    public void withDrawShouldStoreTransactionInHistoryWithDateAndCurrentBalanceSubtractQuantity()  {
+    public void withDrawShouldStoreTransactionInHistoryWithDateAndCurrentBalanceSubtractQuantityAndOperation()  {
         //given
         Account account = new Account();
         account.deposit(1000);
@@ -94,6 +97,7 @@ public class AccountTest {
         assertNotNull(account.getLastTransaction());
         assertEquals(-100,account.getLastTransaction().getAmount());
         assertEquals(900,account.getLastTransaction().getBalance());
+        assertEquals(WITHDRAW_OPERATION_SYMBOL,account.getLastTransaction().getOperation());
         assertDateTransaction(dateBeforeWithdraw, account, dateAfterDeposit);
     }
 
