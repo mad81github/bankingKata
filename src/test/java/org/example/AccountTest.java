@@ -44,6 +44,24 @@ public class AccountTest {
         assertNotNull(account.getLastTransaction());
         assertEquals(100,account.getLastTransaction().getAmount());
         assertEquals(100,account.getLastTransaction().getBalance());
+        assertTrue(account.getLastTransaction().getDate().compareTo(dateBeforeDeposit)>=0);
+        assertTrue(account.getLastTransaction().getDate().compareTo(dateAfterDeposit)<=0);
+    }
+
+    @Test
+    public void depositShouldStoreTransactionInHistoryWithDateAndCurrentBalanceAddingQuantiy(){
+        //given
+        Date dateBeforeDeposit = new Date();
+        Account account = new Account();
+        account.deposit(1000);
+
+        //when
+        account.deposit(100);
+        //then
+        Date dateAfterDeposit = new Date();
+        assertNotNull(account.getLastTransaction());
+        assertEquals(100,account.getLastTransaction().getAmount());
+        assertEquals(1100,account.getLastTransaction().getBalance());
         assertTrue(account.getLastTransaction().getDate().after(dateBeforeDeposit));
         assertTrue(account.getLastTransaction().getDate().compareTo(dateBeforeDeposit)>=0);
         assertTrue(account.getLastTransaction().getDate().compareTo(dateAfterDeposit)<=0);
