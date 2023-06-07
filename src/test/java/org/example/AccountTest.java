@@ -129,11 +129,15 @@ public class AccountTest {
         //when
         genericAccount.deposit(500);
         genericAccount.withdraw(100);
+
         //then
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String dateFormatted = simpleDateFormat.format(new Date());
+
         assertEquals(
                 "Date\tAmount\tBalance\n"
-                + "07.06.2023\t+500\t500\n"
-                +"07.06.2023\t-100\t400",
+                + dateFormatted+"\t+500\t500\n"
+                + dateFormatted+"\t-100\t400",
                 genericAccount.printStatement());
 
     }
