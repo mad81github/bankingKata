@@ -3,6 +3,8 @@ package org.example;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.Date;
+
 /**
  * Write a class Account that offers the
  * following methods void deposit(int)
@@ -31,13 +33,21 @@ public class AccountTest {
     }
 
     @Test
-    public void depositShouldStoreTransactionInHistory(){
+    public void depositShouldStoreTransactionInHistoryWithDateAndCurrentBalance(){
         //given
+        Date dateBeforeDeposit = new Date();
         Account account = new Account();
-        //when & then
+        //when
         account.deposit(100);
+        //then
+        Date dateAfterDeposit = new Date();
         assertNotNull(account.getLastTransaction());
+        assertEquals(100,account.getLastTransaction().getAmount());
+        assertEquals(100,account.getLastTransaction().getBalance());
+        assertTrue(account.getLastTransaction().getDate().after(dateBeforeDeposit));
+        assertTrue(account.getLastTransaction().getDate().before(dateAfterDeposit));
     }
+
 
 
 

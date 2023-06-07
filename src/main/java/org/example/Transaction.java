@@ -4,18 +4,18 @@ import java.util.Date;
 
 public class Transaction {
 
-    private final Date transaction;
+    private final Date date;
     private final Integer amount;
     private final Integer balance;
 
-    public Transaction(Date transaction, Integer amount, Integer balance) {
-        this.transaction = transaction;
+    public Transaction(Date date, Integer amount, Integer balance) {
+        this.date = date;
         this.amount = amount;
         this.balance = balance;
     }
 
-    public Date getTransaction() {
-        return transaction;
+    public Date getDate() {
+        return date;
     }
 
     public Integer getAmount() {
