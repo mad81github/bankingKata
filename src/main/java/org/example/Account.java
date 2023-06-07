@@ -18,7 +18,7 @@ public class Account {
             throw new RuntimeException("No Enough amount");
         }
         currentAmount = currentAmount-quantity;
-        Transaction transaction = new Transaction(new Date(),quantity,currentAmount);
+        Transaction transaction = new Transaction(new Date(),-quantity,currentAmount);
         history.add(transaction);
 
     }

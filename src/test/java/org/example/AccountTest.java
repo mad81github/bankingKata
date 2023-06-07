@@ -82,7 +82,7 @@ public class AccountTest {
         //then
         Date dateAfterDeposit = new Date();
         assertNotNull(account.getLastTransaction());
-        assertEquals(100,account.getLastTransaction().getAmount());
+        assertEquals(-100,account.getLastTransaction().getAmount());
         assertEquals(900,account.getLastTransaction().getBalance());
         assertDateTransaction(dateBeforeWithdraw, account, dateAfterDeposit);
     }
