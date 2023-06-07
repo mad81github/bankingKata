@@ -13,9 +13,9 @@ public class Account {
         Transaction transaction = new Transaction(new Date(),quantity,currentAmount);
         history.add(transaction);
     }
-    void withdraw(int quantity) throws Exception {
+    void withdraw(int quantity) {
         if (currentAmount - quantity < 0) {
-            throw new Exception("No Enough amount");
+            throw new RuntimeException("No Enough amount");
         }
     }
     String printStatement() {
