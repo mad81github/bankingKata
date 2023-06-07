@@ -1,23 +1,21 @@
 package org.example;
 
-import java.util.Date;
-
 public class Transaction {
 
-    private final Date date;
+    private final String date;
     private final Integer amount;
     private final Integer balance;
 
     private final String operation;
 
-    public Transaction(Date date, Integer amount, Integer balance, String operation) {
+    public Transaction(String date, Integer amount, Integer balance, String operation) {
         this.date = date;
         this.amount = amount;
         this.balance = balance;
         this.operation = operation;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 

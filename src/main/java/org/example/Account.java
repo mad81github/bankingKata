@@ -1,51 +1,36 @@
 package org.example;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.List;
 
 public class Account {
-    static final String DEPOSIT_OPERATION_SYMBOL = "+" ;
-    static final String WITHDRAW_OPERATION_SYMBOL = "-";
-    private int currentAmount = 0;
 
-    private List<Transaction> history= new ArrayList<>();
 
-    void applyQuantity(int quantity, String operation){
-        currentAmount = currentAmount+quantity;
-        Transaction transaction = new Transaction(new Date(),quantity,currentAmount, operation);
-        history.add(transaction);
+    private final TransactionRepo transactionRepo;
+    private final TransactionService transactionService;
+
+    private final StatementGenerator statementGenerator;
+
+    public Account(TransactionRepo transactionRepo, TransactionService transactionService, StatementGenerator statementGenerator) {
+        this.transactionRepo = transactionRepo;
+        this.transactionService = transactionService;
+        this.statementGenerator = statementGenerator;
     }
 
-    void deposit(int quantity){
-        applyQuantity(quantity, DEPOSIT_OPERATION_SYMBOL);
+
+    void deposit(int quantity) {
+        transactionRepo.add(transactionService.deposit(quantity));
     }
+
     void withdraw(int quantity) {
-        if (currentAmount - quantity < 0) {
-            throw new RuntimeException("No Enough amount");
-        }
-        applyQuantity(-quantity,WITHDRAW_OPERATION_SYMBOL);
-
+        transactionRepo.substract(transactionService.withdraw(quantity));
     }
+
     String printStatement() {
-        String statement = "Date\tAmount\tBalance";
-        for (Transaction transaction: history) {
-            statement = statement + "\n"+ formatTransaction(transaction);
-        }
-        return statement;
+        List<Transaction> transactions =  transactionRepo.getHistory();
+        return statementGenerator.generateWithTransactions(transactions);
     }
 
-    String printLastStatement() {
-        Transaction transaction = getLastTransaction();
-        return formatTransaction(transaction);
-    }
 
-    private static String formatTransaction(Transaction transaction) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        return simpleDateFormat.format(transaction.getDate()) + "\t" + transaction.getOperation() + Math.abs(transaction.getAmount()) + "\t" + transaction.getBalance();
-    }
 
-    Transaction getLastTransaction() {
-        return history.get(history.size()-1);
-     }
 
 }

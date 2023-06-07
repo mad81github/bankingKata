@@ -1,14 +1,14 @@
 package org.example;
 
-import static org.example.Account.DEPOSIT_OPERATION_SYMBOL;
-import static org.example.Account.WITHDRAW_OPERATION_SYMBOL;
+
+import static org.example.TransactionService.DEPOSIT_OPERATION_SYMBOL;
+import static org.example.TransactionService.WITHDRAW_OPERATION_SYMBOL;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.mockito.ArgumentCaptor;
 
 /**
  * Write a class Account that offers the
@@ -17,112 +17,76 @@ import java.util.Date;
  */
 public class AccountTest {
 
+    public static final String CURRENT_DATE = "21.05.2023";
     Account genericAccount;
+    private TransactionRepo transactionRepo;
+    private DateBuilder dateBuilder;
+
+    private TransactionService transactionService;
+    private StatementGenerator statementGenerator;
 
     @BeforeEach
     public void setUp(){
-        genericAccount = new Account();
+        statementGenerator = new StatementGenerator();
+        transactionRepo = spy(new TransactionRepoImpl());
+        dateBuilder = spy(DateBuilder.class);
+        transactionService = new TransactionService(dateBuilder);
+        genericAccount = new Account(transactionRepo, transactionService, statementGenerator);
+        when(dateBuilder.getCurrentDate()).thenReturn(CURRENT_DATE);
+
     }
 
 
-
     @Test
-    public void withdrawWithoutFoundsShouldRaiseError(){
+    public void withdrawWithInsufficientFundsShouldRaiseError(){
         //given
-        Account account = new Account();
+        Account account = new Account(transactionRepo, transactionService, statementGenerator);
         //when & then
         assertThrows(Exception.class,
                 () -> account.withdraw(1));
     }
 
-    @Test
-    public void getLastTransactionShouldRaiseErrorWhenHistoryIsEmpty(){
-        //given
-        Account account = new Account();
-        //when & then
-        assertThrows(Exception.class,
-                () -> account.getLastTransaction());
-    }
 
-    @Test
-    public void depositShouldStoreTransactionInHistoryWithDateAndCurrentBalance(){
-        //given
-        Date dateBeforeDeposit = new Date();
-        Account account = new Account();
-        //when
-        account.deposit(100);
-        //then
-        Date dateAfterDeposit = new Date();
-        assertNotNull(account.getLastTransaction());
-        assertEquals(100,account.getLastTransaction().getAmount());
-        assertEquals(100,account.getLastTransaction().getBalance());
-        assertDateTransaction(dateBeforeDeposit, account, dateAfterDeposit);
-    }
 
-    private static void assertDateTransaction(Date dateBeforeDeposit, Account account, Date dateAfterDeposit) {
-        assertTrue(account.getLastTransaction().getDate().compareTo(dateBeforeDeposit)>=0);
-        assertTrue(account.getLastTransaction().getDate().compareTo(dateAfterDeposit)<=0);
-    }
 
     @Test
     public void depositShouldStoreTransactionInHistoryWithDateAndCurrentBalanceAddingQuantiyAndOperation(){
         //given
-        Date dateBeforeDeposit = new Date();
-        Account account = new Account();
-        account.deposit(1000);
-
+        Account account = new Account(transactionRepo, transactionService, statementGenerator);
         //when
         account.deposit(100);
         //then
-        Date dateAfterDeposit = new Date();
-        assertNotNull(account.getLastTransaction());
-        assertEquals(100,account.getLastTransaction().getAmount());
-        assertEquals(DEPOSIT_OPERATION_SYMBOL,account.getLastTransaction().getOperation());
-        assertEquals(1100,account.getLastTransaction().getBalance());
-        assertDateTransaction(dateBeforeDeposit, account, dateAfterDeposit);
+        ArgumentCaptor<Transaction> argumentCaptor = ArgumentCaptor.forClass(Transaction.class);
+        verify(transactionRepo).add(argumentCaptor.capture());
+        Transaction transaction = argumentCaptor.getValue();
+        assertEquals(100,transaction.getAmount());
+        assertEquals(100,transaction.getBalance());
+        assertEquals(DEPOSIT_OPERATION_SYMBOL,transaction.getOperation());
+        assertEquals(CURRENT_DATE,transaction.getDate());
     }
 
 
     @Test
     public void withDrawShouldStoreTransactionInHistoryWithDateAndCurrentBalanceSubtractQuantityAndOperation()  {
         //given
-        Account account = new Account();
+        Account account = new Account(transactionRepo,transactionService, statementGenerator);
         account.deposit(1000);
-        Date dateBeforeWithdraw = new Date();
 
         //when
         account.withdraw(100);
         //then
-        Date dateAfterDeposit = new Date();
-        assertNotNull(account.getLastTransaction());
-        assertEquals(-100,account.getLastTransaction().getAmount());
-        assertEquals(900,account.getLastTransaction().getBalance());
-        assertEquals(WITHDRAW_OPERATION_SYMBOL,account.getLastTransaction().getOperation());
-        assertDateTransaction(dateBeforeWithdraw, account, dateAfterDeposit);
+        ArgumentCaptor<Transaction> argumentCaptor = ArgumentCaptor.forClass(Transaction.class);
+        verify(transactionRepo).substract(argumentCaptor.capture());
+        Transaction transaction = argumentCaptor.getValue();
+        assertEquals(-100,transaction.getAmount());
+        assertEquals(900,transaction.getBalance());
+        assertEquals(WITHDRAW_OPERATION_SYMBOL,transaction.getOperation());
+        assertEquals(CURRENT_DATE,transaction.getDate());
     }
 
-    @Test
-    public void whenDepositAndPrintLastStatementShouldReturnLastTransactionFormatted() {
-        //when
-        genericAccount.deposit(100);
-        //then
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        simpleDateFormat.format(new Date());
-        assertEquals(simpleDateFormat.format(new Date())+"\t+100\t100",genericAccount.printLastStatement());
 
-    }
 
-    @Test
-    public void whenWithDrawAndPrintLastStatementShouldReturnLastTransactionFormatted() {
-        //when
-        genericAccount.deposit(1000);
-        genericAccount.withdraw(500);
-        //then
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        simpleDateFormat.format(new Date());
-        assertEquals(simpleDateFormat.format(new Date())+"\t-500\t500",genericAccount.printLastStatement());
 
-    }
 
     @Test
     public void printStatementWhenDepositAndWithDrawAndShouldReturnStatementFormatted() {
@@ -130,14 +94,14 @@ public class AccountTest {
         genericAccount.deposit(500);
         genericAccount.withdraw(100);
 
+
+
         //then
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        String dateFormatted = simpleDateFormat.format(new Date());
 
         assertEquals(
                 "Date\tAmount\tBalance\n"
-                + dateFormatted+"\t+500\t500\n"
-                + dateFormatted+"\t-100\t400",
+                + CURRENT_DATE+"\t+500\t500\n"
+                + CURRENT_DATE+"\t-100\t400",
                 genericAccount.printStatement());
 
     }
