@@ -21,7 +21,6 @@ public class AccountTest {
     Account genericAccount;
     private TransactionRepo transactionRepo;
     private DateBuilder dateBuilder;
-
     private TransactionService transactionService;
     private StatementGenerator statementGenerator;
 
@@ -95,9 +94,7 @@ public class AccountTest {
         genericAccount.withdraw(100);
 
 
-
         //then
-
         assertEquals(
                 "Date\tAmount\tBalance\n"
                 + CURRENT_DATE+"\t+500\t500\n"
