@@ -1,12 +1,11 @@
 package org.example;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Account {
     private int currentAmount = 0;
 
-   Map<String, Map.Entry<Integer,Integer>> history= new HashMap<>();
+    private List<Transaction> history= new ArrayList<>();
 
     void deposit(int quantity){
 
@@ -21,4 +20,9 @@ public class Account {
 
         return null;
     }
+
+     Transaction getLastTransaction() {
+        return history.get(history.size()-1);
+     }
+
 }
