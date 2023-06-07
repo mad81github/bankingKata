@@ -7,19 +7,20 @@ public class Account {
 
     private List<Transaction> history= new ArrayList<>();
 
-    void deposit(int quantity){
+    void applyQuantity(int quantity){
         currentAmount = currentAmount+quantity;
-
         Transaction transaction = new Transaction(new Date(),quantity,currentAmount);
         history.add(transaction);
+    }
+
+    void deposit(int quantity){
+        applyQuantity(quantity);
     }
     void withdraw(int quantity) {
         if (currentAmount - quantity < 0) {
             throw new RuntimeException("No Enough amount");
         }
-        currentAmount = currentAmount-quantity;
-        Transaction transaction = new Transaction(new Date(),-quantity,currentAmount);
-        history.add(transaction);
+        applyQuantity(-quantity);
 
     }
     String printStatement() {
