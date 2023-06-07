@@ -33,7 +33,7 @@ public class Account {
     String printLastStatement() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         Transaction transaction = getLastTransaction();
-        return simpleDateFormat.format(transaction.getDate())+"\t"+transaction.getAmount()+"\t"+transaction.getBalance();
+        return simpleDateFormat.format(transaction.getDate())+"\t"+transaction.getOperation()+transaction.getAmount()+"\t"+transaction.getBalance();
     }
 
      Transaction getLastTransaction() {
