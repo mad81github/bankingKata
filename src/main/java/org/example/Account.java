@@ -31,12 +31,16 @@ public class Account {
     }
 
     String printLastStatement() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         Transaction transaction = getLastTransaction();
-        return simpleDateFormat.format(transaction.getDate())+"\t"+transaction.getOperation()+Math.abs(transaction.getAmount())+"\t"+transaction.getBalance();
+        return formatTransaction(transaction);
     }
 
-     Transaction getLastTransaction() {
+    private static String formatTransaction(Transaction transaction) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        return simpleDateFormat.format(transaction.getDate()) + "\t" + transaction.getOperation() + Math.abs(transaction.getAmount()) + "\t" + transaction.getBalance();
+    }
+
+    Transaction getLastTransaction() {
         return history.get(history.size()-1);
      }
 
