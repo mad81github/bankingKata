@@ -17,6 +17,10 @@ public class Account {
         if (currentAmount - quantity < 0) {
             throw new RuntimeException("No Enough amount");
         }
+        currentAmount = currentAmount-quantity;
+        Transaction transaction = new Transaction(new Date(),quantity,currentAmount);
+        history.add(transaction);
+
     }
     String printStatement() {
 

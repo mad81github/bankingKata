@@ -73,9 +73,9 @@ public class AccountTest {
     @Test
     public void withDrawShouldStoreTransactionInHistoryWithDateAndCurrentBalanceSubtractQuantity()  {
         //given
-        Date dateBeforeDeposit = new Date();
         Account account = new Account();
         account.deposit(1000);
+        Date dateBeforeWithdraw = new Date();
 
         //when
         account.withdraw(100);
@@ -84,7 +84,7 @@ public class AccountTest {
         assertNotNull(account.getLastTransaction());
         assertEquals(100,account.getLastTransaction().getAmount());
         assertEquals(900,account.getLastTransaction().getBalance());
-        assertDateTransaction(dateBeforeDeposit, account, dateAfterDeposit);
+        assertDateTransaction(dateBeforeWithdraw, account, dateAfterDeposit);
     }
 
 
