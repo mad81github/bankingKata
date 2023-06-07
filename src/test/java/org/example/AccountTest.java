@@ -45,7 +45,8 @@ public class AccountTest {
         assertEquals(100,account.getLastTransaction().getAmount());
         assertEquals(100,account.getLastTransaction().getBalance());
         assertTrue(account.getLastTransaction().getDate().after(dateBeforeDeposit));
-        assertTrue(account.getLastTransaction().getDate().before(dateAfterDeposit));
+        assertTrue(account.getLastTransaction().getDate().compareTo(dateBeforeDeposit)>=0);
+        assertTrue(account.getLastTransaction().getDate().compareTo(dateAfterDeposit)<=0);
     }
 
 
