@@ -102,13 +102,25 @@ public class AccountTest {
     }
 
     @Test
-    public void getLastStatementShouldReturnLastTransactionFormatted() {
+    public void whenDepositAndPrintLastStatementShouldReturnLastTransactionFormatted() {
         //when
         genericAccount.deposit(100);
         //then
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         simpleDateFormat.format(new Date());
         assertEquals(simpleDateFormat.format(new Date())+"\t+100\t100",genericAccount.printLastStatement());
+
+    }
+
+    @Test
+    public void whenWithDrawAndPrintLastStatementShouldReturnLastTransactionFormatted() {
+        //when
+        genericAccount.deposit(1000);
+        genericAccount.withdraw(500);
+        //then
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        simpleDateFormat.format(new Date());
+        assertEquals(simpleDateFormat.format(new Date())+"\t-500\t500",genericAccount.printLastStatement());
 
     }
 
