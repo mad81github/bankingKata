@@ -1,8 +1,11 @@
 package org.example;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -11,6 +14,13 @@ import java.util.Date;
  * void withdraw(int) String printStatement()
  */
 public class AccountTest {
+
+    Account genericAccount;
+
+    @BeforeEach
+    public void setUp(){
+        genericAccount = new Account();
+    }
 
 
 
@@ -86,6 +96,19 @@ public class AccountTest {
         assertEquals(900,account.getLastTransaction().getBalance());
         assertDateTransaction(dateBeforeWithdraw, account, dateAfterDeposit);
     }
+
+    @Test
+    public void getLastStatementShouldReturnLastTransactionFormatted() {
+        //when
+        genericAccount.deposit(100);
+        //then
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        simpleDateFormat.format(new Date());
+        assertEquals(simpleDateFormat.format(new Date())+"\t+100\t100",genericAccount.printLastStatement());
+
+    }
+
+
 
 
 }

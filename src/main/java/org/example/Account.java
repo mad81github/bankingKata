@@ -1,5 +1,6 @@
 package org.example;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Account {
@@ -24,8 +25,13 @@ public class Account {
 
     }
     String printStatement() {
-
         return null;
+    }
+
+    String printLastStatement() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        Transaction transaction = getLastTransaction();
+        return simpleDateFormat.format(transaction.getDate())+"\t"+transaction.getAmount()+"\t"+transaction.getBalance();
     }
 
      Transaction getLastTransaction() {
