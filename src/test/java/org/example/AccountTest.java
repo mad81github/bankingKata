@@ -1,6 +1,6 @@
 package org.example;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -17,7 +17,7 @@ public class AccountTest {
         //given
         Account account = new Account();
         //when & then
-        Assertions.assertThrows(Exception.class,
+        assertThrows(Exception.class,
                 () -> account.withdraw(1));
     }
 
@@ -26,8 +26,17 @@ public class AccountTest {
         //given
         Account account = new Account();
         //when & then
-        Assertions.assertThrows(Exception.class,
+        assertThrows(Exception.class,
                 () -> account.getLastTransaction());
+    }
+
+    @Test
+    public void depositShouldStoreTransactionInHistory(){
+        //given
+        Account account = new Account();
+        //when & then
+        account.deposit(100);
+        assertNotNull(account.getLastTransaction());
     }
 
 
