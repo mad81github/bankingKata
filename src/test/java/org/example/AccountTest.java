@@ -124,6 +124,19 @@ public class AccountTest {
 
     }
 
+    @Test
+    public void printStatementWhenDepositAndWithDrawAndShouldReturnStatementFormatted() {
+        //when
+        genericAccount.deposit(500);
+        genericAccount.withdraw(100);
+        //then
+        assertEquals(
+                "Date\tAmount\tBalance\n"
+                + "07.06.2023\t+500\t500\n"
+                +"07.06.2023\t-100\t400",
+                genericAccount.printStatement());
+
+    }
 
 
 

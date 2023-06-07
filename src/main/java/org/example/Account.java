@@ -27,7 +27,11 @@ public class Account {
 
     }
     String printStatement() {
-        return null;
+        String statement = "Date\tAmount\tBalance";
+        for (Transaction transaction: history) {
+            statement = statement + "\n"+ formatTransaction(transaction);
+        }
+        return statement;
     }
 
     String printLastStatement() {
