@@ -13,6 +13,6 @@ public class StatementGenerator {
     }
 
     private  String formatTransaction(Transaction transaction) {
-        return transaction.getDate()+ "\t" + transaction.getOperation() + Math.abs(transaction.getAmount()) + "\t" + transaction.getBalance();
+        return transaction.getDate()+ "***\t" + transaction.getOperation() + Math.abs(transaction.getAmount()) + "\t" + transaction.getBalance();
     }
 }
