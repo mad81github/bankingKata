@@ -31,6 +31,6 @@ jobs:
       run: mvn clean package test --fail-at-end
     - name: Publish Test Report
       if: success() || failure()
-      uses: mad81github/action-surefire-report@v3
+      uses: mad81github/action-surefire-report@main
 
    
